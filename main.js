@@ -90,3 +90,87 @@
    }
 
   }
+
+})();
+/**
+ * Función que indica la posición, el tipo el ancho y alto de las Barras, además de su velocidad
+ * le define una posición X y Y dentro del tablero
+ */
+(function(){
+ self.Bar = function(x,y,width,height,board){
+  this.x = x;
+  this.y = y;
+  this.width = width;
+  this.height = height;
+  this.board = board;
+  this.board.bars.push(this);
+  this.kind = "rectangle";
+  this.speed = 10;
+ }
+
+ self.Bar.prototype = {
+  down: function(){
+   this.y += this.speed;
+
+  },
+  up: function(){
+   this.y -= this.speed;
+  },
+  toString: function(){
+   return "x: "+ this.x +"y: "+ this.y ;
+  }
+ }
+})();
+
+/**
+ * Función que inicia Canvas(ancho, alto y el del tablero, ademas se especifica juego 2D
+ */
+
+
+(function(){
+ self.BoardView = function(canvas,board){
+  this.canvas = canvas;
+  this.canvas.width = board.width;
+  this.canvas.height = board.height;
+  this.board = board;
+  this.cxt = canvas.getContext("2d");
+ }
+
+ self.BoardView.prototype = {
+  clean: function(){
+   this.cxt.clearRect(0,0,this.board.width,this.board.height);
+  },
+  draw: function(){
+   for (var i = this.board.elements.length - 1; i >= 0; i--) {
+    var el = this.board.elements[i];
+
+    draw(this.cxt,el);
+   };
+  },
+
+  /**
+   * Funcion que chequea las coalisiones con un condicional que evalua
+   */
+  check_collisions: function(){
+   for (var i = this.board.bars.length - 1; i >= 0; i--) {
+    var bar = this.board.bars[i];
+    if (hit(bar, this.board.ball)) {
+     this.board.ball.collision(bar);
+
+    }
+   };
+
+  },
+  /**-
+   * Funcion de juego para el inicio, limpiar y dibujas , ademas mover la bola
+   */
+  play: function(){
+   if(this.board.playing){
+   this.clean();
+   this.draw();
+   this.check_collisions();
+   this.board.ball.move();
+    }
+  }
+
+ }
