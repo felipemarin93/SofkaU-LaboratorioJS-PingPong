@@ -174,3 +174,105 @@
   }
 
  }
+
+ function hit(a,b){
+  //Revisa si a colisiona con b
+  var hit = false;
+  //Colisiones hirizontales
+  if(b.x + b.width >= a.x && b.x < a.x + a.width){
+
+   //Colisiona verticales
+   if (b.y + b.height >= a.y && b.y < a.y + a.height) 
+    hit = true;
+  }
+
+  //Colisión de a con b
+  if(b.x <= a.x && b.x + b.width >= a.x + a.width){
+   
+   if (b.y <= a.y && b.y + b.height >= a.y + a.height) 
+    hit = true;
+  }
+
+  //Colision b con a
+  if(a.x <= b.x && a.x + a.width >= b.x + b.width){
+   //Colisiona verticales
+   if (a.y <= b.y && a.y + a.height >= b.y + b.height) 
+    hit = true;
+  }
+  return hit;
+ }
+
+ function draw(cxt,element){
+  
+  switch(element.kind){
+   case "rectangle":
+   cxt.fillRect(element.x,element.y,element.width,element.height);
+   break;
+
+   case "circle":
+   cxt.beginPath();
+   cxt.arc(element.x,element.y,element.radius,0,7);
+   cxt.fill();
+   cxt.closePath();
+   break;
+  }
+ }
+})();
+
+/**
+ * Se crean los objetos tipo tablero con sus respectivas posiciones
+ */
+
+  var board = new Board(800,400);
+  var bar = new Bar(20,100,40,100,board);
+  var bar_2 = new Bar(735,100,40,100,board);
+  var canvas = document.getElementById('canvas');
+  var board_view = new BoardView(canvas,board);
+  var ball = new Ball(350,100,10,board);
+
+  /**
+   * Se cran los eventos listeners que indican enl movimiento de las barras
+   */
+
+document.addEventListener("keydown",function(ev){
+ //console.log(ev.keyCode);
+ if(ev.keyCode == 87){
+     ev.preventDefault();  
+  bar.up();
+  
+ }
+ else if(ev.keyCode == 65){
+  ev.preventDefault();
+  bar.down();
+ }
+ else if(ev.keyCode == 68){
+     ev.preventDefault();  
+  bar_2.up();
+ }
+ else if(ev.keyCode == 90){
+  ev.preventDefault();
+  bar_2.down();
+ }
+ else if (ev.keyCode ===32){
+  ev.preventDefault();
+  board.playing = !board.playing;
+
+ }
+
+
+});
+
+/**
+ * Evento listener que carga el main del juego  y se envía una dirección a la bola
+ */
+board_view.draw();
+window.requestAnimationFrame(controller);
+setTimeout(function(){
+  ball.direction = -2;
+},4000);
+
+function controller(){
+  board_view.play(); 
+  window.requestAnimationFrame(controller);
+
+}
