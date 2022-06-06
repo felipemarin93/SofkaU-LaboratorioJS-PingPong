@@ -1,5 +1,6 @@
 /**
  * @author Daniel Felipe Marin Giraldo
+ * v1.0        link Repo: https://github.com/felipemarin93/SofkaU-LaboratorioJS-PingPong
  * Función que contiene el tiempo, el movimiento, la barra de movimiento, ancho y alto 
  * ademas de los 2 jugadores del pingpong
  */
@@ -263,7 +264,8 @@ document.addEventListener("keydown",function(ev){
 });
 
 /**
- * Evento listener que carga el main del juego  y se envía una dirección a la bola
+ * Evento listener que carga el  main del juego  y se envía una dirección a la bola
+ * 
  */
 board_view.draw();
 window.requestAnimationFrame(controller);
@@ -271,6 +273,7 @@ setTimeout(function(){
   ball.direction = -2;
 },4000);
 
+//función controladora
 function controller(){
   board_view.play(); 
   window.requestAnimationFrame(controller);
